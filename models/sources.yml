@@ -1,0 +1,11 @@
+﻿version: 2
+sources:
+  - name: raw
+    description: Raw CSV extracts from the (synthetic) core-banking / wallet system.
+    meta:
+      external_location: "data/raw/{name}.csv"
+    tables:
+      - name: customers
+      - name: merchants
+      - name: transactions
+      - name: loans

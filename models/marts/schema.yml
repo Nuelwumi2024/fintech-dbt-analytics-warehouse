@@ -1,0 +1,31 @@
+﻿version: 2
+models:
+  - name: fct_transactions
+    description: One row per transaction, enriched with merchant category. Grain = transaction_id.
+    columns:
+      - name: transaction_id
+        tests: [unique, not_null]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships: { to: ref('dim_customers'), field: customer_id }
+      - name: status
+        tests:
+          - accepted_values: { values: ['success', 'failed', 'reversed'] }
+      - name: amount_ngn
+        tests: [not_null]
+  - name: dim_customers
+    description: One row per customer with lifetime activity and churn flag.
+    columns:
+      - name: customer_id
+        tests: [unique, not_null]
+      - name: kyc_tier
+        tests:
+          - accepted_values: { values: [1, 2, 3], quote: false }
+  - name: mart_daily_payments_kpis
+    description: Daily executive KPIs - volume, success/failure rate, fraud count.
+    columns:
+      - name: txn_date
+        tests: [unique, not_null]
+  - name: mart_channel_performance
+    description: Reliability and risk by channel and transaction type.
